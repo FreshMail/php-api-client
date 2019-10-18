@@ -2,6 +2,8 @@ PHP API Client for Freshmail API V3
 
 [Official API V3 Documentation](https://freshmail.pl/dokumentacja-rest-api-v3/docs/messaging/emails/)
 
+This API V3 client covers only sending transactional emails by FreshMail Application. If You want to use any other functions of API use [API V2 client](https://github.com/FreshMail/REST-API).
+
 # Requirements
 
 * PHP7.1 and above
