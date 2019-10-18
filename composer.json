@@ -1,0 +1,22 @@
+{
+    "name": "freshmail/php-api-client",
+    "description": "FreshMail API PHP Client",
+    "type": "library",
+    "license": "Apache-2.0",
+    "keywords": ["api client", "mail", "transactional mail", "freshmail", "freshmail.com", "freshmail.pl"],
+    "autoload": {
+        "psr-4": {
+            "FreshMail\\Api\\Client\\": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "monolog/monolog": "^1.24",
+        "psr/log": "^1.1",
+        "psr/http-message": "^1.0",
+        "myclabs/php-enum": "^1.7"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.3"
+    }
+}
