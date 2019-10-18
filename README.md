@@ -1,6 +1,6 @@
 PHP API Client for Freshmail API V3
 
-[Official API V3](https://freshmail.pl/dokumentacja-rest-api-v3/docs/messaging/emails/)
+[Official API V3 Documentation](https://freshmail.pl/dokumentacja-rest-api-v3/docs/messaging/emails/)
 
 # Requirements
 
