@@ -141,6 +141,27 @@ $mail->addRecipientTo('recipient email address');
 $response = $mailService->send($mail);
 ```
 
+## Send email with attachments
+
+You can sent emails with attachments. You can upload up to 10 files. Weight of all attachments in email can't exceed 10Mb.
+```php
+use \FreshMail\Api\Client\Service\Messaging\Mail;
+use \FreshMail\Api\Client\Messaging\Mail\MailBag;
+
+$token = 'MY_APP_TOKEN';
+$mailService = new Mail($token);
+
+$mail = new MailBag();
+$mail->setFrom('from@address.com', 'Support');
+$mail->setSubject('Hello, thats mail with attachments!!');
+$mail->setHtml('<html><body><strong>Attachments</strong> in mail</body></html>');
+$mail->addRecipientTo('recipient email address');
+$mail->addAttachment('path to local file 1');
+$mail->addAttachment('path to local file 2');
+
+$response = $mailService->send($mail);
+```
+
 # Error handling
 API throws exceptions for errors that occurred during requests and errors occurred before sending requests.
 

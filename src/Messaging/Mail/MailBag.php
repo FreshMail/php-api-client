@@ -3,6 +3,7 @@
 namespace FreshMail\Api\Client\Messaging\Mail;
 
 use FreshMail\Api\Client\Messaging\Mail\Exception\ContentMismatchException;
+use FreshMail\Api\Client\Messaging\Mail\Exception\ExternalFileException;
 
 class MailBag implements \JsonSerializable
 {
@@ -32,12 +33,21 @@ class MailBag implements \JsonSerializable
     private $headers = [];
 
     /**
+     * @var Attachment[]
+     */
+    private $attachments = [];
+
+    /**
      * @var string
      */
     private $templateHash;
 
     /**
-     * @param mixed $to
+     * @param string $email
+     * @param array $customFields
+     * @param array $customHeaders
+     * @throws Exception\InvalidCustomFieldException
+     * @throws Exception\InvalidHeaderException
      */
     public function addRecipientTo(string $email, array $customFields = [], array $customHeaders = []): void
     {
@@ -62,7 +72,9 @@ class MailBag implements \JsonSerializable
     }
 
     /**
-     * @param mixed $html
+     * @param string $body
+     * @throws ContentMismatchException
+     * @throws Exception\InvalidContentBodyException
      */
     public function setHtml(string $body): void
     {
@@ -74,7 +86,9 @@ class MailBag implements \JsonSerializable
     }
 
     /**
-     * @param mixed $text
+     * @param string $body
+     * @throws ContentMismatchException
+     * @throws Exception\InvalidContentBodyException
      */
     public function setText(string $body): void
     {
@@ -87,6 +101,7 @@ class MailBag implements \JsonSerializable
 
     /**
      * @param string $hash
+     * @throws ContentMismatchException
      */
     public function setTemplateHash(string $hash): void
     {
@@ -98,7 +113,19 @@ class MailBag implements \JsonSerializable
     }
 
     /**
-     * @param mixed $headers
+     * @param string $filepath
+     * @throws ExternalFileException
+     * @throws Exception\FileDoesNotExistException
+     */
+    public function addAttachment(string $filepath): void
+    {
+        $this->attachments[] = new Attachment($filepath);
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @throws Exception\InvalidHeaderException
      */
     public function addHeader(string $name, string $value): void
     {
@@ -107,12 +134,21 @@ class MailBag implements \JsonSerializable
 
     /**
      * @param array $headers
+     * @throws Exception\InvalidHeaderException
      */
     public function addHeaders(array $headers): void
     {
         foreach ($headers as $name => $value) {
             $this->addHeader($name, $value);
         }
+    }
+
+    /**
+     * @return Attachment[]
+     */
+    public function getAttachments(): array
+    {
+        return $this->attachments;
     }
 
     /**
@@ -192,6 +228,7 @@ class MailBag implements \JsonSerializable
     /**
      * @param ContentType $contentType
      * @param string $body
+     * @throws Exception\InvalidContentBodyException
      */
     private function replaceContent(ContentType $contentType, string $body): void
     {
@@ -277,6 +314,10 @@ class MailBag implements \JsonSerializable
 
         if ($headers) {
             $data['headers'] = $headers;
+        }
+
+        foreach ($this->getAttachments() as $attachment) {
+            $data['attachments'][] = $attachment->toArray();
         }
 
         return $data;
