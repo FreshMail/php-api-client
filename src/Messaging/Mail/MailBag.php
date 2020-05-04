@@ -113,23 +113,11 @@ class MailBag implements \JsonSerializable
     }
 
     /**
-     * @param string $filepath
-     * @throws ExternalFileException
-     * @throws Exception\FileDoesNotExistException
+     * @param AttachmentInterface $attachment
      */
-    public function addAttachment(string $filepath): void
+    public function addAttachment(AttachmentInterface $attachment): void
     {
-        $this->attachments[] = new Attachment($filepath);
-    }
-
-    /**
-     * @param string $name
-     * @param string $content
-     * @throws Exception\InvalidContentBodyException
-     */
-    public function addBase64Attachment(string $name, string $content): void
-    {
-        $this->attachments[] = new Base64Attachment($name, $content);
+        $this->attachments[] = $attachment;
     }
 
     /**
