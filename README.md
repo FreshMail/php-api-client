@@ -146,6 +146,8 @@ $response = $mailService->send($mail);
 You can sent emails with attachments. You can upload up to 10 files. Weight of all attachments in email can't exceed 10Mb.
 ```php
 use \FreshMail\Api\Client\Service\Messaging\Mail;
+use FreshMail\Api\Client\Messaging\Mail\Base64Attachment;
+use FreshMail\Api\Client\Messaging\Mail\LocalFileAttachment;
 use \FreshMail\Api\Client\Messaging\Mail\MailBag;
 
 $token = 'MY_APP_TOKEN';
@@ -165,7 +167,7 @@ $mail->addAttachment(
 $mail->addAttachment(
             new Base64Attachment(
                 'file name',
-                base64 file content
+                'base64 file content'
             )
         );
 
