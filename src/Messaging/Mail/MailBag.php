@@ -33,7 +33,7 @@ class MailBag implements \JsonSerializable
     private $headers = [];
 
     /**
-     * @var Attachment[]
+     * @var AttachmentInterface[]
      */
     private $attachments = [];
 
@@ -113,13 +113,11 @@ class MailBag implements \JsonSerializable
     }
 
     /**
-     * @param string $filepath
-     * @throws ExternalFileException
-     * @throws Exception\FileDoesNotExistException
+     * @param AttachmentInterface $attachment
      */
-    public function addAttachment(string $filepath): void
+    public function addAttachment(AttachmentInterface $attachment): void
     {
-        $this->attachments[] = new Attachment($filepath);
+        $this->attachments[] = $attachment;
     }
 
     /**
@@ -144,7 +142,7 @@ class MailBag implements \JsonSerializable
     }
 
     /**
-     * @return Attachment[]
+     * @return AttachmentInterface[]
      */
     public function getAttachments(): array
     {
