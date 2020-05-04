@@ -33,7 +33,7 @@ class MailBag implements \JsonSerializable
     private $headers = [];
 
     /**
-     * @var Attachment[]
+     * @var AttachmentInterface[]
      */
     private $attachments = [];
 
@@ -124,6 +124,16 @@ class MailBag implements \JsonSerializable
 
     /**
      * @param string $name
+     * @param string $content
+     * @throws Exception\InvalidContentBodyException
+     */
+    public function addBase64Attachment(string $name, string $content): void
+    {
+        $this->attachments[] = new Base64Attachment($name, $content);
+    }
+
+    /**
+     * @param string $name
      * @param string $value
      * @throws Exception\InvalidHeaderException
      */
@@ -144,7 +154,7 @@ class MailBag implements \JsonSerializable
     }
 
     /**
-     * @return Attachment[]
+     * @return AttachmentInterface[]
      */
     public function getAttachments(): array
     {

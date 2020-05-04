@@ -158,6 +158,7 @@ $mail->setHtml('<html><body><strong>Attachments</strong> in mail</body></html>')
 $mail->addRecipientTo('recipient email address');
 $mail->addAttachment('path to local file 1');
 $mail->addAttachment('path to local file 2');
+$mail->addBase64Attachment('file_name.extension', 'base64 file content');
 
 $response = $mailService->send($mail);
 ```

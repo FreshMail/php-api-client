@@ -9,7 +9,7 @@ use FreshMail\Api\Client\Messaging\Mail\Exception\FileDoesNotExistException;
  * Class Attachment
  * @package FreshMail\Api\Client\Messaging\Mail
  */
-class Attachment
+class Attachment implements AttachmentInterface
 {
     /**
      * @var string
