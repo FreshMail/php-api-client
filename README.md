@@ -156,9 +156,18 @@ $mail->setFrom('from@address.com', 'Support');
 $mail->setSubject('Hello, thats mail with attachments!!');
 $mail->setHtml('<html><body><strong>Attachments</strong> in mail</body></html>');
 $mail->addRecipientTo('recipient email address');
-$mail->addAttachment('path to local file 1');
-$mail->addAttachment('path to local file 2');
-$mail->addBase64Attachment('file_name.extension', 'base64 file content');
+$mail->addAttachment(
+            new LocalFileAttachment(
+                'path to local file 1',
+                 'optional file name'
+            )
+        );
+$mail->addAttachment(
+            new Base64Attachment(
+                'file name',
+                base64 file content
+            )
+        );
 
 $response = $mailService->send($mail);
 ```
