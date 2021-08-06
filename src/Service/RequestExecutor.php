@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7;
 use GuzzleHttp\RequestOptions;
 use Psr\Log\LoggerInterface;
 
@@ -57,10 +58,10 @@ class RequestExecutor
     {
         try {
             $response = $this->guzzle->request('POST', $uri, $this->getRequestOptions($data));
-            $this->logger->debug(\GuzzleHttp\Psr7\str($response));
+            $this->logger->debug(Psr7\Message::toString($response));
             return new HttpResponse($response);
         } catch (ClientException $exception) {
-            $this->logger->error(sprintf('Request: %s, Response: %s', \GuzzleHttp\Psr7\str($exception->getRequest()), \GuzzleHttp\Psr7\str($exception->getResponse())));
+            $this->logger->error(sprintf('Request: %s, Response: %s', Psr7\Message::toString($exception->getRequest()), Psr7\Message::toString($exception->getResponse())));
             throw new \FreshMail\Api\Client\Exception\ClientException($exception->getMessage(), $exception->getRequest(), $exception->getResponse());
         } catch (ServerException $exception) {
             throw new \FreshMail\Api\Client\Exception\ServerException($exception->getMessage());
@@ -94,7 +95,7 @@ class RequestExecutor
              sprintf(
         'freshmail/php-api-client:%s;guzzle:%s;php:%s;interface:%s',
         FreshMailApiClient::VERSION,
-        ClientInterface::VERSION,
+        ClientInterface::MAJOR_VERSION,
         PHP_VERSION,
         php_sapi_name());
     }
