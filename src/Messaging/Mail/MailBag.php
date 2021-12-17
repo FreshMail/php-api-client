@@ -241,9 +241,9 @@ class MailBag implements \JsonSerializable
 
     /**
      * @param ContentType $contentType
-     * @return string
+     * @return Content|null
      */
-    private function getContent(ContentType $contentType): Content
+    private function getContent(ContentType $contentType): ?Content
     {
         foreach ($this->contents as $content) {
             if ($content->getContentType() == $contentType) {

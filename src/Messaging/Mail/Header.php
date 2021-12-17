@@ -25,7 +25,7 @@ class Header
         }
 
         if (str_replace(" \n\r", '', $name) != $name) {
-            throw new InvalidHeaderException(sprintf('Invalid header name "%s", header contains whitespaces'));
+            throw new InvalidHeaderException(sprintf('Invalid header name "%s", header contains whitespaces', $name));
         }
 
         if (strtolower(substr($name, 0,2)) != 'x-') {
