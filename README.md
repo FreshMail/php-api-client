@@ -6,7 +6,7 @@ This API V3 client covers only sending transactional emails by FreshMail Applica
 
 # Requirements
 
-* PHP7.1 and above
+* PHP7.2 and above
 
 # Installation
 
