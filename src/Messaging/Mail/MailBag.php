@@ -18,6 +18,11 @@ class MailBag implements \JsonSerializable
     private $from;
 
     /**
+     * @var From Reply-To
+     */
+    private $replyTo;
+
+    /**
      * @var string
      */
     private $subject;
@@ -61,6 +66,15 @@ class MailBag implements \JsonSerializable
     public function setFrom(string $fromEmail, string $fromName): void
     {
         $this->from = new From(new Email($fromEmail), $fromName);
+    }
+
+    /**
+     * @param string $replyToEmail
+     * @param string $replyToName
+     */
+    public function setReplyTo(string $replyToEmail, string $replyToName): void
+    {
+        $this->replyTo = new From(new Email($replyToEmail), $replyToName);
     }
 
     /**
@@ -168,6 +182,30 @@ class MailBag implements \JsonSerializable
     /**
      * @return string
      */
+    public function getReplyToEmail(): ?string
+    {
+        if ($this->replyTo) {
+            return $this->replyTo->getEmail();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplyToName(): ?string
+    {
+        if ($this->replyTo) {
+            return $this->replyTo->getName();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string
+     */
     public function getSubject(): string
     {
         return $this->subject;
@@ -253,6 +291,7 @@ class MailBag implements \JsonSerializable
 
         return null;
     }
+
     /**
      * @return array
      */
@@ -301,6 +340,18 @@ class MailBag implements \JsonSerializable
             'subject' => $this->getSubject(),
             'recipients' => $recipients
         ];
+
+        $replyTo = [];
+        if ($this->getReplyToEmail()) {
+            $replyTo['email'] = $this->getReplyToEmail();
+            if ($this->getReplyToName()) {
+                $replyTo['name'] = $this->getReplyToName();
+            }
+        }
+
+        if ($replyTo) {
+            $data['replyTo'] = $replyTo;
+        }
 
         if ($contents) {
             $data['contents'] = $contents;
