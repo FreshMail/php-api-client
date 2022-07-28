@@ -182,17 +182,25 @@ class MailBag implements \JsonSerializable
     /**
      * @return string
      */
-    public function getReplyToEmail(): string
+    public function getReplyToEmail(): ?string
     {
-        return $this->replyTo->getEmail();
+        if ($this->replyTo) {
+            return $this->replyTo->getEmail();
+        }
+
+        return null;
     }
 
     /**
      * @return string
      */
-    public function getReplyToName(): string
+    public function getReplyToName(): ?string
     {
-        return $this->replyTo->getName();
+        if ($this->replyTo) {
+            return $this->replyTo->getName();
+        }
+
+        return null;
     }
 
     /**
