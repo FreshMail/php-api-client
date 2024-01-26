@@ -2,6 +2,7 @@
 
 namespace FreshMail\Api\Client\Service;
 
+use FreshMail\Api\Client\Exception\RequestException;
 use FreshMail\Api\Client\Response\HttpResponse;
 use FreshMail\Api\Client\FreshMailApiClient;
 use GuzzleHttp\Client;
@@ -9,8 +10,8 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TransferException;
+use GuzzleHttp\Psr7\Message;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7;
 use GuzzleHttp\RequestOptions;
 use Psr\Log\LoggerInterface;
 
@@ -58,21 +59,25 @@ class RequestExecutor
     {
         try {
             $response = $this->guzzle->request('POST', $uri, $this->getRequestOptions($data));
-            $this->logger->debug(Psr7\Message::toString($response));
+            $this->logger->debug(Message::toString($response));
             return new HttpResponse($response);
         } catch (ClientException $exception) {
-            $this->logger->error(sprintf('Request: %s, Response: %s', Psr7\Message::toString($exception->getRequest()), Psr7\Message::toString($exception->getResponse())));
-            throw new \FreshMail\Api\Client\Exception\ClientException($exception->getMessage(), $exception->getRequest(), $exception->getResponse());
+            $this->logger->error(sprintf(
+                'Request: %s, Response: %s',
+                Message::toString($exception->getRequest()),
+                Message::toString($exception->getResponse())
+            ));
+            throw new \FreshMail\Api\Client\Exception\ClientException(
+                $exception->getMessage(),
+                $exception->getRequest(),
+                $exception->getResponse()
+            );
         } catch (ServerException $exception) {
             throw new \FreshMail\Api\Client\Exception\ServerException($exception->getMessage());
         } catch (TransferException $exception) {
-            throw new \FreshMail\Api\Client\Exception\RequestException($exception->getMessage());
+            throw new RequestException($exception->getMessage());
         }
     }
-
-    /**
-     * @return array
-     */
     private function getRequestOptions(\JsonSerializable $data): array
     {
         return [
@@ -92,12 +97,11 @@ class RequestExecutor
     private function createUserAgent(): string
     {
         return
-             sprintf(
-        'freshmail/php-api-client:%s;guzzle:%s;php:%s;interface:%s',
-        FreshMailApiClient::VERSION,
-        ClientInterface::MAJOR_VERSION,
-        PHP_VERSION,
-        php_sapi_name());
+            sprintf(
+                'freshmail/php-api-client:%s;guzzle:%s;php:%s;interface:%s',
+                FreshMailApiClient::VERSION,
+                ClientInterface::MAJOR_VERSION,
+                PHP_VERSION,
+                php_sapi_name());
     }
-
 }
